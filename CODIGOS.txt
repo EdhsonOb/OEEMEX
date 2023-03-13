@@ -1,0 +1,448 @@
+    <?/*
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+  
+ 
+  $servername = "localhost";
+  $dbusername = "tu_nombre_de_usuario";
+  $dbpassword = "tu_contraseña";
+  $dbname = "usuarios";
+  
+  $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+  if ($conn->connect_error) {
+    die("Error al conectar a la base de datos: " . $conn->connect_error);
+  }
+  
+  $sql = "SELECT id, tipo_usuario FROM credenciales WHERE username = '$username' AND password = '$password'";
+  $result = $conn->query($sql);
+  
+  if ($result->num_rows == 1) {
+   
+    $row = $result->fetch_assoc();
+    $_SESSION['usuario'] = $username;
+    if ($row['tipo_usuario'] == 'admin') {
+      header('Location: pagina_admin.php');
+    } else {
+      header('Location: pagina_usuario.php');
+    }
+    exit;
+  } else {
+    echo 'Nombre de usuario o contraseña incorrectos.';
+  }
+}
+*/?>
+
+
+<!-- ?
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title></title>
+	</head>
+
+	<body>
+    <?php // $usuario = $_POST['user'];
+    //en esta parte estaremos validando que se haya presionado el boton de submit
+    /* 
+    $username = $_POST['user'];
+    $password = $_POST['password'];
+    echo $username;
+    $sql = "SELECT id, tipo_usuario FROM usuarios WHERE username = '$username' AND password = '$password'";
+    $result = $conn->query($sql);
+    
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        $_SESSION['usuario'] = $username;
+    
+        if ($row['tipo_usuario'] == 'admin') {
+            echo'<META HTTP-EQUIV="REFRESH" CONTENT="0;URL=menu.php">';
+        } else {
+            header('Location: almacen.php');
+        }
+    } else {
+        header('Location: ');
+    }
+                      mysqli_close($conexion); // Cerramos la conexion con la base de datos
+
+    */
+    ?>
+	</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Función para cargar la lista de productos
+    function cargarProductos() {
+      $.ajax({
+        url: 'listar_productos.php',
+        success: function(data) {
+          $('#productos').html(data);
+        }
+      });
+    }
+
+    // Función para agregar un nuevo producto
+    function agregarProducto() {
+      var nombre = $('#nombre').val();
+      var descripcion = $('#descripcion').val();
+      var cantidad = $('#cantidad').val();
+      var precio = $('#precio').val();
+      $.ajax({
+        type: 'POST',
+        url: 'agregar_producto.php',
+        data: {
+          nombre: nombre,
+          descripcion: descripcion,
+          cantidad: cantidad,
+          precio: precio
+        },
+        success: function(data) {
+          cargarProductos();
+        }
+      });
+    }
+
+    // Función para editar un producto existente
+    function editarProducto(id) {
+      var nombre = $('#nombre_' + id).val();
+      var descripcion = $('#descripcion_' + id).val();
+      var cantidad = $('#cantidad_' + id).val();
+      var precio = $('#precio_' + id).val();
+      $.ajax({
+        type: 'POST',
+        url: 'editar_producto.php',
+        data: {
+          id: id,
+          nombre: nombre,
+          descripcion: descripcion,
+          cantidad: cantidad,
+          precio: precio
+        },
+        success: function(data) {
+          cargarProductos();
+        }
+      });
+    }
+
+    // Función para eliminar un producto
+    function eliminarProducto(id) {
+      if (confirm('¿Estás seguro de eliminar este producto?')) {
+        $.ajax({
+          type: 'POST',
+          url: 'eliminar_producto.php',
+          data: { id: id },
+          success: function(data) {
+            cargarProductos();
+          }
+        });
+      }
+    }
+
+    $(document).ready(function() {
+      cargarProductos();
+    });
+  </script>
+  
+  SET nombre='$nombre', descripcion='$descripcion', cantidad='$cantidad', precio='$precio' WHERE id=$id"
+ 
+</html>
+
+
+session_start();
+// Verificar si la conexión se ha realizado correctamente
+if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+    $usuario_actual = $_SESSION['username'];
+    $tipo_usuario = $_SESSION['tipo_usuario'];
+} else {
+    // Si la variable de sesión no existe o está vacía, asignar un valor predeterminado o mostrar un mensaje de error
+    $usuario_actual = "Usuario desconocido";
+    $tipo_usuario = "Tipo de usuario desconocido";
+    // Opcionalmente, puedes mostrar un mensaje de error en la página para que el usuario sepa que algo salió mal
+}
+echo "Usuario actual: " . $usuario_actual . "<br>";
+
+
+// Comprobar si se ha enviado el formulario para actualizar la base de datos
+if(isset($_POST['actualizar'])){
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $cantidad = $_POST['cantidad'];
+    $precio = $_POST['precio'];
+
+    // Actualizar los datos en la base de datos
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, tipo_usuario, fecha_modificacion) VALUES (?, ?, ?, ?, ?, ?, NOW())"); 
+    //En lugar de colocar los valores de los campos directamente en la consulta SQL, se utiliza un marcador de posición "?", lo que indica que se esperan valores en su lugar. Luego, los valores reales se establecen utilizando el método "bind_param()", que vincula los valores de los parámetros con los marcadores de posición en la consulta SQL.
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual, $tipo_usuario);
+    $stmt->execute();
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Datos agregados correctamente');
+            window.location.href = 'almacen.php';
+        </script>";
+    } else {
+        echo "Error al agregar datos: " . $stmt->error;
+    }
+}
+
+
+
+// Verificar si la conexión se ha realizado correctamente
+if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+    $usuario_actual = $_SESSION['username'];
+} else {
+    // Si la variable de sesión no existe o está vacía, asignar un valor predeterminado o mostrar un mensaje de error
+    $usuario_actual = "Usuario desconocido";
+    // Opcionalmente, puedes mostrar un mensaje de error en la página para que el usuario sepa que algo salió mal
+}
+
+
+
+
+
+// Verificar si la conexión se ha realizado correctamente
+if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+    $usuario_actual = $_SESSION['username'];
+    $tipo_usuario = $_SESSION['tipo_usuario'];
+} else {
+    // Si la variable de sesión no existe o está vacía, asignar un valor predeterminado o mostrar un mensaje de error
+    $usuario_actual = "Usuario desconocido";
+    $tipo_usuario = "Tipo de usuario desconocido";
+    // Opcionalmente, puedes mostrar un mensaje de error en la página para que el usuario sepa que algo salió mal
+}
+
+
+
+
+Listar productos VErsion 1
+<?php
+session_start();
+include "conectarbd.php";
+
+
+
+$usuario_actual = $_SESSION['username'];
+if (!$usuario_actual) {
+    die("Error: no se ha proporcionado el usuario actual");
+  }
+// Comprobar si se ha enviado el formulario para actualizar la base de datos
+if(isset($_POST['actualizar'])){
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $cantidad = $_POST['cantidad'];
+    $precio = $_POST['precio'];
+
+    // Actualizar los datos en la base de datos
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, fecha_modificacion) VALUES (?, ?, ?, ?, ?, NOW())"); 
+    //En lugar de colocar los valores de los campos directamente en la consulta SQL, se utiliza un marcador de posición "?", lo que indica que se esperan valores en su lugar. Luego, los valores reales se establecen utilizando el método "bind_param()", que vincula los valores de los parámetros con los marcadores de posición en la consulta SQL.
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual);
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Datos agregados correctamente');
+            window.location.href = 'almacen.php';
+        </script>";
+    } else {
+        echo "Error al agregar datos: " . $stmt->error;
+    }
+}
+
+// Cerrar la conexión con la base de datos
+$conn->close();
+?>
+
+
+ <!--<div id="productos"></div>
+    <hr>
+    <h2>Agregar nuevo producto</h2>
+    <form action="listar_productos.php" method="POST">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre"><br>
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion"><br>
+      <label for="cantidad">Cantidad:</label>
+      <input type="number" id="cantidad" name="cantidad"><br>
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" name="precio"><br>
+      <input type="submit" name="agregar" value="Agregar" >
+    </form>
+    <a href="cses.php">cerrar sesion</a>
+    <script src="sweetalert2.all.min.js"></script>-->
+
+Almacen
+    <div id="productos"></div>
+    <hr>
+    <h2>Agregar nuevo producto</h2>
+    <form action="listar_productos.php" method="POST">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre"><br>
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion"><br>
+      <label for="cantidad">Cantidad:</label>
+      <input type="number" id="cantidad" name="cantidad"><br>
+      <label for="precio">Precio:</label>
+      <input type="number" id="precio" name="precio"><br>
+      <input type="submit" name="actualizar" value="Agregar" >
+    </form>
+    <a href="cses.php">cerrar sesion</a>
+    <script src="sweetalert2.all.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    optimizacion codigo listar productos 
+    <?php
+session_start();
+include "bd\conectarbd.php";
+
+$usuario_actual = $_SESSION['username'];
+if (!$usuario_actual) {
+  die("Error: no se ha proporcionado el usuario actual");
+}
+
+if (isset($_POST['agregar']) || isset($_POST['editar']) || isset($_POST['borrar'])) {
+  $nombre = $_POST['nombre'];
+  $descripcion = $_POST['descripcion'];
+  $cantidad = $_POST['cantidad'];
+  $precio = $_POST['precio'];
+
+  // Determinar la acción que se está realizando (agregar, editar, borrar)
+  if (isset($_POST['agregar'])) {
+    $accion = "agregar";
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, fecha_modificacion) VALUES (?, ?, ?, ?, ?, NOW())");
+  } elseif (isset($_POST['editar'])) {
+    $accion = "editar";
+    $stmt = $conn->prepare("UPDATE producto SET descripcion=?, cantidad=?, precio=?, usuario_modificacion=?, fecha_modificacion=NOW() WHERE nombre=?");
+    $stmt->bind_param("sidss", $descripcion, $cantidad, $precio, $usuario_actual, $nombre);
+  } elseif (isset($_POST['borrar'])) {
+    $accion = "borrar";
+    $stmt = $conn->prepare("DELETE FROM producto WHERE nombre=?");
+  }
+
+  // Completar la ejecución de la consulta preparada según la acción que se esté realizando
+  if ($accion == "agregar") {
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual);
+  } elseif ($accion == "borrar") {
+    $stmt->bind_param("s", $nombre);
+  }
+
+  // Ejecutar la consulta preparada y redirigir a la página de inventario
+  if ($stmt->execute()) {
+    echo "<script>
+            alert('Datos $accion correctamente');
+            window.location.href = 'inventario.php';
+        </script>";
+  } else {
+    echo "Error al $accion datos: " . $stmt->error;
+  }
+
+  // Cerrar la conexión con la base de datos
+  $conn->close();
+}
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VERISON " DEL CRUDDDD LISTAR productos
+
+<?php
+session_start();
+include "bd\conectarbd.php";
+
+
+
+$usuario_actual = $_SESSION['username'];
+if (!$usuario_actual) {
+    die("Error: no se ha proporcionado el usuario actual");
+  }
+// Comprobar si se ha enviado el formulario para actualizar la base de datos
+//! este if isset sirve para agregar los datos
+if(isset($_POST['agregar'])){
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $cantidad = $_POST['cantidad'];
+    $precio = $_POST['precio'];
+
+    // Actualizar los datos en la base de datos
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, fecha_modificacion) VALUES (?, ?, ?, ?, ?, NOW())"); 
+    //En lugar de colocar los valores de los campos directamente en la consulta SQL, se utiliza un marcador de posición "?", lo que indica que se esperan valores en su lugar. Luego, los valores reales se establecen utilizando el método "bind_param()", que vincula los valores de los parámetros con los marcadores de posición en la consulta SQL.
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual);
+    if ($stmt->execute()) {
+        echo "<script>
+        alert('Datos agregados correctamente');
+    </script>";
+    header("Location: opInventario/agregar.html");
+    exit();
+    } else {
+        echo "Error al agregar datos: " . $stmt->error;
+    }
+}
+
+//! este if isset sirve para editar los datos
+if(isset($_POST['editar'])){
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $cantidad = $_POST['cantidad'];
+    $precio = $_POST['precio'];
+
+    // Actualizar los datos en la base de datos
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, fecha_modificacion) VALUES (?, ?, ?, ?, ?, NOW())"); 
+    //En lugar de colocar los valores de los campos directamente en la consulta SQL, se utiliza un marcador de posición "?", lo que indica que se esperan valores en su lugar. Luego, los valores reales se establecen utilizando el método "bind_param()", que vincula los valores de los parámetros con los marcadores de posición en la consulta SQL.
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual);
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Datos agregados correctamente');
+            window.location.href = 'almacen.php';
+        </script>";
+    } else {
+        echo "Error al agregar datos: " . $stmt->error;
+    }
+}
+//! este if isset sirve para borrar los datos
+if(isset($_POST['borrar'])){
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $cantidad = $_POST['cantidad'];
+    $precio = $_POST['precio'];
+
+    // Actualizar los datos en la base de datos
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, fecha_modificacion) VALUES (?, ?, ?, ?, ?, NOW())"); 
+    //En lugar de colocar los valores de los campos directamente en la consulta SQL, se utiliza un marcador de posición "?", lo que indica que se esperan valores en su lugar. Luego, los valores reales se establecen utilizando el método "bind_param()", que vincula los valores de los parámetros con los marcadores de posición en la consulta SQL.
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual);
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Datos agregados correctamente');
+            window.location.href = 'almacen.php';
+        </script>";
+    } else {
+        echo "Error al agregar datos: " . $stmt->error;
+    }
+}
+
+// Cerrar la conexión con la base de datos
+$conn->close();
+?>
+-->
+

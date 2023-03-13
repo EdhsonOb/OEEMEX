@@ -1,0 +1,29 @@
+.button-delete{
+    background-size: cover;
+    background-position: center;
+    width: 64px;
+    height: 40px;
+    background-color: red;
+    border: 0px;
+    text-align: center;
+}
+
+.titulos{
+    text-align: center;
+
+}
+
+table{
+    border: 1px solid rgb(0, 110, 255);
+    padding: auto;
+    margin: auto;
+}
+
+th,td{
+    border: 1px solid rgb(0, 110, 255) ;
+}
+
+.img-boton{
+    width:45%;
+    height: 100%;
+}
