@@ -23,7 +23,7 @@ if(isset($_POST['agregar'])){
     if ($stmt->execute()) {
         echo "<script>
         alert('Datos agregados correctamente');
-        window.location.href = 'opInventario/agregar.php';
+        window.location.href = 'almacen/inventario/agregar.php';
     </script>";
         
     exit();
@@ -47,7 +47,7 @@ if(isset($_POST['editar'])){
     if ($stmt->execute()) {
         echo "<script>
             alert('Datos modificados correctamente');
-            window.location.href = 'almacen.php';
+            window.location.href = 'almacen/almacen.php';
         </script>";
     } else {
         echo "Error al agregar datos: " . $stmt->error;
@@ -63,7 +63,7 @@ if(isset($_POST['borrar'])){
     $stmt = $conn->prepare("DELETE FROM producto WHERE id = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-      echo "<script>alert('El producto ha sido eliminado'); setTimeout(function(){window.location.href='almacen.php'}, 20);</script>";
+      echo "<script>alert('El producto ha sido eliminado'); setTimeout(function(){window.location.href='almacen/almacen.php'}, 20);</script>";
     } else {
       echo "Error al eliminar el producto: " . $stmt->error;
     }

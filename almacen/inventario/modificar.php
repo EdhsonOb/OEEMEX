@@ -49,7 +49,7 @@ if ($stmt->fetch()) {
 
   <nav class="navbar navbar-dark bg-primary">
     <a class="navbar-brand" href="#">
-      <img style="margin-left: 5%; margin-right: 2%;" src="../img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      <img style="margin-left: 5%; margin-right: 2%;" src="../../img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
       Panel de control
     </a>
 

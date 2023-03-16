@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include "conectarbd.php";
+include "../conectarbd.php";
 $sql = "SELECT * FROM producto";
 $resultado = $conn->query($sql);
 
@@ -34,7 +34,7 @@ if ($_SESSION['tipo_usuario'] == 'archivos' && basename($_SERVER['PHP_SELF']) ==
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="cssv2/inventario.css">
+  <link rel="stylesheet" href="../cssv2/inventario.css">
   <title>Inventario</title>
 </head>
 
@@ -59,18 +59,18 @@ if ($_SESSION['tipo_usuario'] == 'archivos' && basename($_SERVER['PHP_SELF']) ==
           <td class="datos"><?php echo $fila["precio"]; ?></td>
           <td class="datos"><?php echo $fila["cantidad"]; ?></td>
           <td class="datos">
-            <a href="modificar.php?id=<?php echo $fila['id']; ?>">
-              <img class="img-boton" src="img/editar.png" alt="">
+            <a href="..\almacen\inventario\calar.php?id=<?php echo $fila['id']; ?>">
+              <img class="img-boton" src="../img/editar.png" alt="">
             </a>
-            <form method="POST" action="listar_productos.php" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+            <form method="POST" action="../listar_productos.php" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
               <input type="hidden" name="id" value="<?php echo $fila['id']; ?>">
-              <button type="submit" name="borrar"><img class="img-boton" src="img/eliminar.png" alt=""></button>
+              <button type="submit" name="borrar"><img class="img-boton" src="../img/eliminar.png" alt=""></button>
             </form>
           </td>
         </tr>
       <?php } ?>
     </table>
-    <a href="opInventario\agregar.php"><img src="img/agregar.png" alt=""></a>
+    <a href="..\almacen\inventario\agregar.php"><img src="../img/agregar.png" alt=""></a>
 
 
 

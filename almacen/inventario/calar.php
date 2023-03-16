@@ -1,5 +1,7 @@
 <?php
-include "../conectarbd.php";
+session_start();
+// cada ../../ dos puntos y la diagonal hace referencia a una carpeta, en este casp estamos pasando de calar, a inventario de inventario a almacen y de ahi sale la ruta
+include "../../conectarbd.php";
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL); 
@@ -40,7 +42,7 @@ if ($stmt->fetch()) {
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="cssv2/mod.css">
+  <link rel="stylesheet" href="../../cssv2/mod.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
@@ -51,7 +53,7 @@ if ($stmt->fetch()) {
 
   <nav class="navbar navbar-dark bg-primary">
     <a class="navbar-brand" href="#">
-      <img style="margin-left: 5%; margin-right: 2%;" src="../img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      <img style="margin-left: 5%; margin-right: 2%;" src="../../img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
       Panel de control
     </a>
 
@@ -63,7 +65,7 @@ if ($stmt->fetch()) {
   </nav>
   <header>Modificar Producto</header>
   <?php if ($resultado && $resultado->num_rows > 0) : ?>
-    <form id="form" action="listar_productos.php" method="POST" class="topBefore">
+    <form id="form" action="../../listar_productos.php" method="POST" class="topBefore">
       <input type="hidden" name="id" value="<?php echo $id; ?>">
       <input type="text" name="nombre" value="<?php echo $nombre; ?>"><br>
       <input name="cantidad" type="number"  value="<?php echo $cantidad; ?>">

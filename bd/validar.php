@@ -22,7 +22,7 @@ if ($result->num_rows == 1) {
     header('Location: ../menu.php');
     exit ();
   } elseif ($row['tipo_usuario'] == 'almacen') {
-    header('Location: ../almacen.php');
+    header('Location: ../almacen/almacen.php');
     exit ();
   } elseif ($row['tipo_usuario'] == 'archivos') {
     header('Location: ../archivo.php');
