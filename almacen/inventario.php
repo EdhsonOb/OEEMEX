@@ -39,45 +39,42 @@ if ($_SESSION['tipo_usuario'] == 'archivos' && basename($_SERVER['PHP_SELF']) ==
 </head>
 
 <body>
-  <div class="boton">
-
-
-    <table>
-      <tr>
-        <th class="titulos">ID</th>
-        <th class="titulos">Nombre</th>
-        <th class="titulos">Descripcion</th>
-        <th class="titulos">Precio</th>
-        <th class="titulos">Cantidad</th>
-        <th class="titulos">Opciones</th>
-      </tr>
-      <?php while ($fila = $resultado->fetch_assoc()) { ?>
-        <tr>
-          <td class="datos"><?php echo $fila["id"]; ?></td>
-          <td class="datos"><?php echo $fila["nombre"]; ?></td>
-          <td class="datos"><?php echo $fila["descripcion"]; ?></td>
-          <td class="datos"><?php echo $fila["precio"]; ?></td>
-          <td class="datos"><?php echo $fila["cantidad"]; ?></td>
-          <td class="datos">
-            <a href="..\almacen\inventario\calar.php?id=<?php echo $fila['id']; ?>">
-              <img class="img-boton" src="../img/editar.png" alt="">
-            </a>
-            <form method="POST" action="../listar_productos.php" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
-              <input type="hidden" name="id" value="<?php echo $fila['id']; ?>">
-              <button type="submit" name="borrar"><img class="img-boton" src="../img/eliminar.png" alt=""></button>
-            </form>
-          </td>
-        </tr>
-      <?php } ?>
-    </table>
-    <a href="..\almacen\inventario\agregar.php"><img src="../img/agregar.png" alt=""></a>
-
-
-
-
-
-
-
+    <div class="boton">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($fila = $resultado->fetch_assoc()) { ?>
+                    <tr>
+                        <td class="one-color"><?php echo $fila["id"]; ?></td>
+                        <td class=""><?php echo $fila["nombre"]; ?></td>
+                        <td class="one-color"><?php echo $fila["descripcion"]; ?></td>
+                        <td class=""><?php echo $fila["precio"]; ?></td>
+                        <td class="one-color"><?php echo $fila["cantidad"]; ?></td>
+                        <td>
+                            <a href="..\almacen\inventario\calar.php?id=<?php echo $fila['id']; ?>">
+                                <img class="img-boton" src="../img/editar.png" alt="">
+                            </a>
+                            <form method="POST" action="../listar_productos.php" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                                <input type="hidden" name="id" value="<?php echo $fila['id']; ?>">
+                                <button class="" type="submit" name="borrar"><img class="img-boton" src="../img/eliminar.png" alt=""></button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+        <a class="agregar" href="..\almacen\inventario\agregar.php"><img src="../img/agregar.png" alt=""></a>
+    </div>
 </body>
+</html>
 
 </html>
