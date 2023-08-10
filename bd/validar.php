@@ -25,7 +25,7 @@ if ($result->num_rows == 1) {
     header('Location: ../almacen/almacen.php');
     exit ();
   } elseif ($row['tipo_usuario'] == 'archivos') {
-    header('Location: ../archivo.php');
+    header('Location: ../archivos/archivo.php');
     exit ();
   }
 } else {

@@ -3,8 +3,8 @@ session_start();
 
 // Verificar que el usuario haya iniciado sesión y sea del tipo "admin"
 if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] != 'admin') {
-  header('Location: index.html');
-  exit;
+    header('Location: index.html');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -25,34 +25,56 @@ if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] != 'admin') {
 <body>
     <nav class="navbar navbar-dark bg-primary">
         <a class="navbar-brand" href="#">
-          <img src="img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
-          <h4 style="color: red">OEEMEX</h4>
+            <img src="img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            <h4 style="color: red">Menu</h4>
         </a>
         <ul class="nav justify-content-end">
             <li class="nav-item class2">
-              <a class="nav-link" href="cses.php">Cerrar sesion</a>
+                <a class="nav-link" style="color: white;" href="cses.php">Cerrar sesion</a>
             </li>
-          </ul>
-      </nav>
+        </ul>
+    </nav>
 
-    <div class="card-deck" >
-        <div class="card img1"  style="width: 400px; background-color: transparent; border: 0px;" >
-            <img  class="card-img-top" src="img/imgarchivos.png" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Gestor de archivos</h5>
-                <p class="card-text">Aqui podras subir tus archivos, ver el de los demas y descargar archivos.</p>
-                <p class="card-text"><input type="button" class="btn btn-primary" name="archivos" value="Entrar" onclick="location.href='archivo.php'"></p>
+    <div class="card-deck">
+        <div class="cards">
+            <div class="card-img"> <img id="textin" class="card-img-top partebaja" src="img/archivo2.png" alt="Card image cap"></div>
+            <div class="card-info">
+                <div class="card-text">
+                    <p class="text-title">Gestor de archivos</p>
+                    <p class="text-subtitle">Aqui podras subir tus archivos, ver el de los demas y descargar archivos.</p>
+                </div>
+                <div class="card-icon">
+                    <a href="archivos/filesAdmin.php">                    
+                        <svg viewBox="0 0 28 25">
+                            <path d="M13.145 2.13l1.94-1.867 12.178 12-12.178 12-1.94-1.867 8.931-8.8H.737V10.93h21.339z"></path>
+                        </svg>
+                    </a>
+
+                </div>
             </div>
         </div>
-        <div class="card img2" style="width: 400px; background-color: transparent;  border: 0px;">
-            <img id="textin" class="card-img-top partebaja" src="img/inventario.png" alt="Card image cap">
-            <div class="card-body inve">
-                <h5 class="card-title">Inventario de almacen</h5>
-                <p class="card-text">Aqui podras ver y administrar el inventario.</p>
-                <p class="card-text"><input type="button" class="btn btn-primary" name="inventario" value="Entrar" onclick="location.href='almacen.php'"></p>
+        <div class="cards">
+            <div class="card-img"><img id="textin" class="card-img-top partebaja" src="img/inventarioV2.png" alt="Card image cap"></div>
+            <div class="card-info">
+                <div class="card-text">
+                    <p class="text-title">Inventario de almacen</p>
+                    <p class="text-subtitle">Aqui podras ver y administrar el inventario</p>
+                </div>
+                <div class="card-icon">
+                    <a href="almacen/almacen.php">
+                        <svg viewBox="0 0 28 25">
+                            <path d="M13.145 2.13l1.94-1.867 12.178 12-12.178 12-1.94-1.867 8.931-8.8H.737V10.93h21.339z"></path>
+                        </svg>
+                    </a>
+
+                </div>
             </div>
         </div>
-    </div>
+
+
+
+        </div>
+    
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

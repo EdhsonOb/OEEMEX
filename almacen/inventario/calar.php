@@ -1,10 +1,10 @@
 <?php
 session_start();
 // cada ../../ dos puntos y la diagonal hace referencia a una carpeta, en este casp estamos pasando de calar, a inventario de inventario a almacen y de ahi sale la ruta
-include "../../conectarbd.php";
+include "../../bd/conectarbd.php";
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL); 
+error_reporting(E_ALL);
 
 $sql = "SELECT * FROM producto";
 $resultado = $conn->query($sql);
@@ -25,11 +25,11 @@ $stmt->bind_result($nombre, $descripcion, $cantidad, $precio);
 
 // Verificar si se encontró información con el ID proporcionado
 if ($stmt->fetch()) {
- $id ;
- $nombre  ;
-  $descripcion  ;
- $cantidad  ;
- $precio ;
+  $id;
+  $nombre;
+  $descripcion;
+  $cantidad;
+  $precio;
 } else {
   echo "No se encontró información con el ID proporcionado.";
 }
@@ -68,12 +68,10 @@ if ($stmt->fetch()) {
     <form id="form" action="../../listar_productos.php" method="POST" class="topBefore">
       <input type="hidden" name="id" value="<?php echo $id; ?>">
       <input type="text" name="nombre" value="<?php echo $nombre; ?>"><br>
-      <input name="cantidad" type="number"  value="<?php echo $cantidad; ?>">
-      <input  name="precio" type="number"  value="<?php echo $precio; ?>">
-      <textarea  name="descripcion" ><?php echo $descripcion; ?></textarea>
+      <input name="cantidad" type="number" value="<?php echo $cantidad; ?>">
+      <input name="precio" type="number" value="<?php echo $precio; ?>">
+      <textarea name="descripcion"><?php echo $descripcion; ?></textarea>
       <input id="submit" type="submit" name="editar" value="Editar">
-
-
     </form>
   <?php else : ?>
     <p>No se encontró información con el ID proporcionado.</p>

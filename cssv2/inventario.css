@@ -1,24 +1,65 @@
-.button-delete{
+.button-delete {
     background-size: cover;
     background-position: center;
-    width: 64px;
-    height: 40px;
-    background-color: red;
+    width: 0px;
+    height: 0px;
+    background-color: transparent;
     border: 0px;
-    text-align: center;
+    justify-content: center;
+    align-items: end;
 }
+
+.editar,
+.frmdelete {
+    display: inline-block;
+    margin-right: 10px;
+    /* ajustar el espacio entre los elementos */
+}
+
+#opciones {
+    width: 40px;
+}
+
+.btns{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.pagination {
+    margin-top: 20px;
+  }
+  
+  .pagination span {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 5px;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .pagination span:hover {
+    background-color: #ddd;
+  }
+  
+  .pagination span.active {
+    background-color: #4CAF50;
+    color: white;
+  }
 
 table {
 
     border-collapse: collapse;
-    width: 100%;
+    width: 95%;
     margin-bottom: 1px;
-    margin-left: 170px;
+    margin-left: 1px;
 }
 
-th, td {
+th,
+td {
     text-align: left;
-    padding: 1px;
+    padding: 3px;
     border-bottom: 1px solid #ddd;
 }
 
@@ -26,24 +67,174 @@ th {
     background-color: rgb(0, 110, 255);
     color: white;
 }
-.agregar{
-    display: block;
-    transform: translateY(-500%);
-}
-.one-color{
-    background-color: #006EFF !important;
-    color: white;
+
+.agreg {
+    display: flex;
+    justify-content: end;
+
 }
 
+.agregar {
+    width: 50px;
+    display: block;
+    
+    align-items: center;
+
+
+}
+
+.arch{
+    width: 170px;
+}
+.one-color {
+    background-color: #4c93ef !important;
+    color: white;
+}
+.op{
+    max-width: 15px;
+}
+#link{
+    max-width: 50px;
+}
+#id{
+    max-width: 2px;
+}
 @media screen and (max-width: 600px) {
     table {
         display: block;
         overflow-x: auto;
-        position: fixed;
-        top: 100px; /* Cambia esta coordenada para ajustar la posición vertical */
-        left: 50%; /* Centra el contenedor horizontalmente */
+
+    
+
+        /* Centra el contenedor horizontalmente */
     }
-    td,th{
-        min-width: 300px;
+
+    td,
+    th {
+        font-size: 15px ;
+        width: 10px;
+
     }
 }
+
+.buttonDownload {
+    display: inline-block;
+    position: relative;
+    padding: 10px 25px;
+    background-color: rgb(0, 110, 255);
+    color: white;
+    font-family: sans-serif;
+    text-decoration: none;
+    font-size: 0.7em;
+    text-align: center;
+    text-indent: 15px;
+    border: none;
+   }
+   
+   .buttonDownload:hover {
+    background-color: rgb(5, 80, 178);
+    color: white;
+   }
+   
+   .buttonDownload:before, .buttonDownload:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 15px;
+    top: 52%;
+   }
+   
+   .buttonDownload:before {
+    width: 10px;
+    height: 2px;
+    border-style: solid;
+    border-width: 0 2px 2px;
+   }
+   
+   .buttonDownload:after {
+    width: 0;
+    height: 0;
+    margin-left: 1px;
+    margin-top: -7px;
+    border-style: solid;
+    border-width: 4px 4px 0 4px;
+    border-color: transparent;
+    border-top-color: inherit;
+    animation: downloadArrow 1s linear infinite;
+    animation-play-state: paused;
+   }
+   
+   .buttonDownload:hover:before {
+    border-color: #cdefbd;
+   }
+   
+   .buttonDownload:hover:after {
+    border-top-color: #cdefbd;
+    animation-play-state: running;
+   }
+   
+   @keyframes downloadArrow {
+    0% {
+     margin-top: -7px;
+     opacity: 1;
+    }
+   
+    0.001% {
+     margin-top: -15px;
+     opacity: 0.4;
+    }
+   
+    50% {
+     opacity: 1;
+    }
+   
+    100% {
+     margin-top: 0;
+     opacity: 0.4;
+    }
+   }
+
+   @media (max-width: 768px) {
+
+    .buttonDownload {
+        display: inline-block;
+        position: relative;
+        padding: 5px 5x;
+        background-color: rgb(0, 110, 255);
+        color: white;
+        font-family: sans-serif;
+        text-decoration: none;
+        font-size: 0.5em;
+        text-align: center;
+        text-indent: 7px;
+        border: none;
+       }
+       .button-delete {
+        background-size: cover;
+        background-position: center;
+        width: 0px;
+        height: 0px;
+        background-color: transparent;
+        border: 0px;
+        justify-content: center;
+        align-items: end;
+    }
+    
+    .editar,
+    .frmdelete {
+        display: inline-block;
+        margin-right: 10px;
+        /* ajustar el espacio entre los elementos */
+    }
+}
+
+
+.dataTables_length {
+    color: blue;
+  }
+  .dataTables_paginate {
+    
+  }
+  .paginate_button {
+
+  }

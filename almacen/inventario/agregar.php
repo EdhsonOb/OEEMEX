@@ -23,7 +23,7 @@ include "../bd/conectarbd.php";
 
   <nav class="navbar navbar-dark bg-primary">
     <a class="navbar-brand" href="#">
-      <img style="margin-left: 5%; margin-right: 2%;" src="../img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      <img style="margin-left: 5%; margin-right: 2%;" src="../../img/logo1.png" width="30" height="30" class="d-inline-block align-top" alt="">
       Panel de control
     </a>
 
@@ -34,19 +34,21 @@ include "../bd/conectarbd.php";
     </ul>
   </nav>
   <header>Agregar productos</header>
-  <form id="form" action="../../listar_productos.php" method="POST" class="topBefore">
+  <form id="form" action="../../listar_productos.php" method="POST" class="topBefore" enctype="multipart/form-data">
 
     <input id="name" name="nombre" type="text" placeholder="Nombre del producto">
     <input id="email" name="cantidad" type="number" placeholder="Cantidad">
     <input id="email" name="precio" type="number" placeholder="Precio">
     <textarea id="message" name="descripcion" type="text" placeholder="Descripcion"></textarea>
+    <input type="file" name="file">
     <input type="submit" name="agregar" value="Agregar">
     <!--<input id="submit" type="submit" name="agregar" value="Agregar"> -->
 
 
   </form>
   <script src="js/invetario.js"></script>
-  <a href="#" onclick="history.go(-1);return false;">Regresar</a>
+  <a href="almacen.php">almacen</a>
+  <a href="#" onclick="history.go(-2);return false;">Regresar</a>
 </body>
 
 </html>

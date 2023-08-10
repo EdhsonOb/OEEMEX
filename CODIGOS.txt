@@ -446,3 +446,68 @@ $conn->close();
 ?>
 -->
 
+
+version con funciones del CRUDDDD
+
+<?php
+session_start();
+include "bd/conectarbd.php";
+
+$usuario_actual = $_SESSION['username'];
+if (!$usuario_actual) {
+    die("Error: no se ha proporcionado el usuario actual");
+}
+
+// Función para agregar un producto a la base de datos
+function agregarProducto($nombre, $descripcion, $cantidad, $precio, $usuario_actual, $conn) {
+    $stmt = $conn->prepare("INSERT INTO producto (nombre, descripcion, cantidad, precio, usuario_modificacion, fecha_modificacion) VALUES (?, ?, ?, ?, ?, NOW())");
+    $stmt->bind_param("ssids", $nombre, $descripcion, $cantidad, $precio, $usuario_actual);
+    if ($stmt->execute()) {
+        echo "<script>
+        alert('Datos agregados correctamente');
+        window.location.href = 'almacen/inventario/agregar.php';
+    </script>";
+        exit();
+    } else {
+        die("Error al agregar datos: " . $stmt->error);
+    }
+}
+
+// Función para editar un producto en la base de datos
+function editarProducto($id, $nombre, $descripcion, $cantidad, $precio, $usuario_actual, $conn) {
+    $stmt = $conn->prepare("UPDATE producto SET nombre=?, descripcion=?, cantidad=?, precio=?, usuario_modificacion=?, fecha_modificacion=NOW() WHERE id=?");
+    $stmt->bind_param("ssidss", $nombre, $descripcion, $cantidad, $precio, $usuario_actual, $id);
+    if ($stmt->execute()) {
+        echo "<script>
+            alert('Datos modificados correctamente');
+            window.location.href = 'almacen/almacen.php';
+        </script>";
+    } else {
+        die("Error al modificar datos: " . $stmt->error);
+    }
+}
+
+// Función para eliminar un producto de la base de datos
+function eliminarProducto($id, $conn) {
+    $stmt = $conn->prepare("DELETE FROM producto WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        echo "<script>alert('El producto ha sido eliminado'); setTimeout(function(){window.location.href='almacen/almacen.php'}, 20);</script>";
+    } else {
+        die("Error al eliminar el producto: " . $stmt->error);
+    }
+}
+
+// Comprobar si se ha enviado el formulario para actualizar la base de datos
+if (isset($_POST['agregar'])) {
+    agregarProducto($_POST['nombre'], $_POST['descripcion'], $_POST['cantidad'], $_POST['precio'], $usuario_actual, $conn);
+} elseif (isset($_POST['editar'])) {
+    editarProducto($_POST['id'], $_POST['nombre'], $_POST['descripcion'], $_POST['cantidad'], $_POST['precio'], $usuario_actual, $conn);
+} elseif (isset($_POST['borrar'])) {
+    eliminarProducto($_POST['id'], $conn);
+}
+
+// Obtener la lista de productos desde la base de datos
+$target_dir = "uploads/";
+$files = scandir($target_dir);
+$productos = $conn->query("SELECT * FROM producto");

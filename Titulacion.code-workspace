@@ -3,6 +3,10 @@
 		{
 			"name": "Titulacion",
 			"path": "."
+		},
+		{
+			"name": "gestor",
+			"path": "../../../../Users/edhso/Desktop/gestor"
 		}
 	],
 	"settings": {}
