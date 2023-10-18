@@ -102,7 +102,7 @@ if (!isset($_SESSION['tipo_usuario'])) {
                             <td class=""><?php echo $fila["nombre"]; ?></td>
                             <td class="one-color"><?php echo $fila["descripcion"]; ?></td>
                             <td class="">$<?php echo $fila["precio"]; ?></td>
-                            <td class="one-color"><?php echo $fila["cantidad"]; ?></td>
+                            <td id="cantidad_<?php echo $fila['id']; ?>" class="one-color"><?php echo $fila["cantidad"]; ?></td>
                             <td class="link" id="link">
                                 <?php
                                 $nombre_dato = $fila["nombre"];
@@ -124,9 +124,9 @@ if (!isset($_SESSION['tipo_usuario'])) {
                                     <a href="../almacen/inventario/calar.php?id=<?php echo $fila['id']; ?>" class="editar">
                                         <img id="opciones" class="img-boton" src="../img/editar.png" alt="">
                                     </a>
-                                    <a href="../almacen/inventario/calar.php?id=<?php echo $fila['id']; ?>" class="editar">
-                                        <img id="opciones" class="img-boton" src="../img/actualizar.png" alt="">
-                                    </a>
+                                    <a href="#" class="editar" onclick="abrirModalActualizar(<?php echo $fila['id']; ?>, <?php echo $fila['cantidad']; ?>)">
+    <img id="opciones" class="img-boton" src="../img/actualizar.png" alt="">
+</a>
                                     <form class="frmdelete" method="POST" action="../listar_productos.php" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
                                         <input type="hidden" name="id" value="<?php echo $fila['id']; ?>">
                                         <button class="button-delete" type="submit" name="borrar"><img id="opciones" class="img-boton" src="../img/eliminar.png" alt=""></button>
@@ -137,19 +137,27 @@ if (!isset($_SESSION['tipo_usuario'])) {
                     <?php } ?>
                 </tbody>
             </table>
-
+            <div id="modalActualizar" style="display: none;">
+    <form id="formularioActualizar">
+        <label for="cantidadEliminar">Cantidad a eliminar:</label>
+        <input type="number" id="cantidadEliminar" name="cantidadEliminar" required>
+        <input type="hidden" id="productoId" name="productoId">
+        <input type="hidden" id="cantidadActual" name="cantidadActual">
+        <button type="button" onclick="eliminarCantidad()">Actualizar</button>
+    </form>
+</div>
         </div>
 
         <div class="boton btns">
             <div class="report"><a href="descargar_reporte.php" class="buttonDownload">Descargar Reporte</a>
             </div>
-            <div class="report"><a class="agregar" href="..\almacen\inventario\agregar.php"><img src="../img/agregar.png" alt=""></a></div>           
+            <div class="report"><a class="agregar" href="..\almacen\inventario\agregar.php"><img src="../img/agregar.png" alt=""></a></div>
         </div>
     </div>
     <!-- display: flex;
 justify-content: space-between;
 align-items: center; -->
-    
+
     <div class="sliderbar" id="slider">
         <div id="menu">
             <ul>
@@ -164,6 +172,38 @@ align-items: center; -->
     <script src="../js/opcpanelcontrol.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.4/datatables.min.js"></script>
+    <script>
+        function abrirModalActualizar(id, cantidadActual) {
+    document.getElementById("productoId").value = id;
+    document.getElementById("cantidadActual").value = cantidadActual;
+    document.getElementById("modalActualizar").style.display = "block";
+}
+function eliminarCantidad() {
+    const cantidadEliminar = parseInt(document.getElementById("cantidadEliminar").value);
+    const productoId = parseInt(document.getElementById("productoId").value);
+    const cantidadActual = parseInt(document.getElementById("cantidadActual").value);
+
+    const nuevaCantidad = cantidadActual - cantidadEliminar;
+
+    // Realizar la actualización en la base de datos utilizando AJAX
+    $.ajax({
+        type: "POST",
+        url: "../listar_productos.php", // Cambia esto por la ruta a tu script PHP de actualización
+        data: { id: productoId, cantidad: nuevaCantidad },
+        success: function(response) {
+            // Actualizar la cantidad en la tabla sin recargar la página
+            const cantidadColumna = document.querySelector(`#cantidad_${productoId}`);
+            cantidadColumna.textContent = nuevaCantidad;
+
+            // Cierra el modal
+            document.getElementById("modalActualizar").style.display = "none";
+        },
+        error: function() {
+            alert("Error al actualizar la cantidad en la base de datos.");
+        }
+    });
+}
+    </script>
     <script>
         const slider = document.getElementById("slider");
         const toggleButton = document.getElementById("toggleButton");

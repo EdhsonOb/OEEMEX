@@ -1,8 +1,6 @@
 <?php
 include "../bd/conectarbd.php";
 // Obtener los datos de los productos
-
-
 ?>
 
 <?php

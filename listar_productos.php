@@ -87,6 +87,22 @@ if(isset($_POST['borrar'])){
       echo "Error al eliminar el producto: " . $stmt->error;
     }
   }
+  if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id"]) && isset($_POST["cantidad"])) {
+    $id = $_POST["id"];
+    $nuevaCantidad = $_POST["cantidad"];
+
+    // Actualizar la cantidad en la base de datos
+    $stmt = $conn->prepare("UPDATE producto SET cantidad = ? WHERE id = ?");
+    $stmt->bind_param("ii", $nuevaCantidad, $id);
+
+    if ($stmt->execute()) {
+        echo "Cantidad actualizada correctamente.";
+    } else {
+        echo "Error al actualizar la cantidad: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
 
 // Cerrar la conexión con la base de datos
 $conn->close();

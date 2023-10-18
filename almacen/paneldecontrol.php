@@ -1,4 +1,7 @@
 <?php
+include "../bd/conectarbd.php";
+?>
+<?php
 session_start();
 
 // Verificar que el usuario haya iniciado sesión
@@ -17,6 +20,22 @@ if ($_SESSION['tipo_usuario'] == 'archivos' && basename($_SERVER['PHP_SELF']) ==
     header('Location: ../../archivo.php');
     exit;
 }
+
+// Obtén los datos de la base de datos para cada categoría
+$sqlMenor250 = "SELECT COUNT(*) as cantidad FROM producto WHERE cantidad < 250";
+$sqlEntre250y750 = "SELECT COUNT(*) as cantidad FROM producto WHERE cantidad >= 250 AND cantidad < 750";
+$sqlMayor750 = "SELECT COUNT(*) as cantidad FROM producto WHERE cantidad >= 750";
+
+$resultMenor250 = $conn->query($sqlMenor250)->fetch_assoc();
+$resultEntre250y750 = $conn->query($sqlEntre250y750)->fetch_assoc();
+$resultMayor750 = $conn->query($sqlMayor750)->fetch_assoc();
+
+$data = [
+    "Menor a 250" => $resultMenor250["cantidad"],
+    "Entre 250 y 750" => $resultEntre250y750["cantidad"],
+    "Mayor a 750" => $resultMayor750["cantidad"]
+];
+//echo json_encode($data);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,97 +55,13 @@ if ($_SESSION['tipo_usuario'] == 'archivos' && basename($_SERVER['PHP_SELF']) ==
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js%22%3E"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
         <link rel="shortcut icon" href="../img/logo1.png" type="image/x-icon">
             <title>Panel de control</title>
-            <style>
-                table {
-                    font-family: Arial, sans-serif;
-                    border-collapse: collapse;
-                    width: 300px;
-                    margin: 20px;
-                }
-
-                th {
-                    background-color: #f2f2f2;
-                    text-align: left;
-                    padding: 8px;
-                }
-
-                td {
-                    padding: 8px;
-                }
-
-                tr:nth-child(even) {
-                    background-color: #f9f9f9;
-                }
-
-                #myChartContainer {
-                    position: relative;
-                    width: 600px;
-                    height: 400px;
-                    margin: 20px;
-                }
-
-                #myChart {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                }
-            </style>
     <style>
-        /* body {
-            background-color: white;
-        }
 
-        .titulo {
-            background-color: deepskyblue;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        ul,
-        li,
-        a {
-            list-style: none;
-            text-decoration: none;
-        }
-
-        .menuv {
-            color: white;
-        }
-
-        #menu {
-            background-color: rgb(0, 110, 255);
-            width: 12%;
-            min-height: 95.6vh;
-        }
-
-        .menuz {
-            padding-top: 55px;
-        }
-
-        #sidebar {
-            float: left;
-            width: 20%;
-            height: 100%;
-            background-color: white;
-            padding: 20px;
-            width: 100vh;
-        }
-
-        .contenido-menu {
-            float: right;
-            width: 88%;
-            height: 200%;
-            padding: 20px;
-            background-color: white;
-            z-index: 10;
-        }
-
-        /* Agregado para la sliderbar */
         #sliderbar {
             position: fixed;
             top: 0;
@@ -204,115 +139,78 @@ font-size: 24px;
     
 
 
-        <div class="contenido-menu" id="contenido">
-
-<div id="myChartContainer">
-    <canvas id="myChart"></canvas>
-</div>
-
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Mes</th>
-            <th>Ventas</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Enero</td>
-            <td>50</td>
-        </tr>
-        <tr>
-            <td>Febrero</td>
-            <td>100</td>
-        </tr>
-        <tr>
-            <td>Marzo</td>
-            <td>-100</td>
-        </tr>
-    </tbody>
-</table>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const table = document.getElementById("myTable");
-        const ctx = document.getElementById("myChart").getContext("2d");
-
-        // Extrae los datos de la tabla
-        const labels = [];
-        const data = [];
-
-        const rows = table.getElementsByTagName("tr");
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i].getElementsByTagName("td");
-            labels.push(cells[0].textContent);
-            data.push(parseInt(cells[1].textContent));
-        }
-
-        // Crea el gráfico con Chart.js
-        const chart = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "Ventas",
-                    data: data,
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f"],
-                    borderColor: "#000",
-                    borderWidth: 2,
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                family: 'Arial',
-                                size: 12,
-                                weight: 'bold'
-                            }
-                        }
+    <div class="contenido-menu" id="contenido">
+    <div id="myChartContainer" style="height: 50vh;">
+        <canvas id="myChart"></canvas>
+    </div>
+    
+    <script>
+    // Crear el gráfico con los datos obtenidos
+    const ctx = document.getElementById("myChart").getContext("2d");
+    const labels = <?php echo json_encode(array_keys($data)); ?>;
+    const valores = <?php echo json_encode(array_values($data)); ?>;
+    
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Cantidad de Productos",
+                data: valores,
+                backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f"],
+                borderColor: "rgba(54, 162, 235, 0.2)",
+                borderWidth: 2,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: {
+                        display: false
                     },
-                    y: {
-                        grid: {
-                            color: "#ddd"
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 50,
-                            font: {
-                                family: 'Arial',
-                                size: 12,
-                                weight: 'bold'
-                            }
+                    ticks: {
+                        font: {
+                            family: 'Arial',
+                            size: 12,
+                            weight: 'bold'
                         }
                     }
                 },
-                plugins: {
-                    legend: {
-                        display: false,
+                y: {
+                    grid: {
+                        color: "#eee"
                     },
-                    title: {
-                        display: true,
-                        text: "Ventas por mes",
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 50,
                         font: {
                             family: 'Arial',
-                            size: 16,
+                            size: 12,
                             weight: 'bold'
                         }
                     }
                 }
-            }
-        });
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: "Cantidad de Productos por Categoría",
+                    font: {
+                        family: 'Arial',
+                        size: 16,
+                        weight: 'bold'
+                    }
+                },
+            },
+        },
     });
 </script>
-</div>
+
     </div>
 
     <div class="sliderbar" id="slider">
@@ -348,10 +246,3 @@ font-size: 24px;
 </body>
 
 </html>
-
-
-
-
-
-
-
